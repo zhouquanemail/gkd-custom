@@ -1,0 +1,77 @@
+// ZCode 局部补丁 v6（本机 + GitHub/jsDelivr 双主机统一版）
+// 变更:
+//  v5: 兜底组对 com.tinder 硬排除（apps:[{id:'com.tinder',enable:false}]）
+//  v6: updateUrl 改为全网可达的 jsDelivr CDN（raw.githubusercontent 国内不可达；本地 LAN 双环境易降级）
+{
+  id: 10010001,
+  name: 'ZCode 局部补丁',
+  version: 6,
+  author: 'zz-zcode',
+  updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
+  checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
+  supportUri: 'https://gkd.li/',
+  categories: [],
+  globalGroups: [
+    {
+      key: 0,
+      name: '开屏广告-兜底',
+      desc: '全 App：仅活动页命中 Splash/Welcome/Launch/AdSplash 的「跳过」才点击',
+      fastQuery: true,
+      matchTime: 10000,
+      actionMaximum: 3,
+      resetMatch: 'app',
+      // Tinder 硬排除：其 pass 按钮 content-desc 就是「跳过」，兜底必误触
+      apps: [{ id: 'com.tinder', enable: false }],
+      rules: [
+        {
+          key: 0,
+          name: 'text跳过-开屏活动页',
+          actionCdKey: 0,
+          activityIds: { regex: '(?i)splash|welcome|launch|adsplash' },
+          matches: ['[text*="跳过"][text.length<10][visibleToUser=true]'],
+        },
+        {
+          key: 1,
+          name: 'desc跳过-开屏活动页',
+          actionCdKey: 0,
+          activityIds: { regex: '(?i)splash|welcome|launch|adsplash' },
+          matches: ['[desc*="跳过"][visibleToUser=true]'],
+        },
+      ],
+    },
+    {
+      key: 20,
+      name: 'Tinder 广告卡片-自动跳过',
+      desc: '牌堆流中出现「AD 徽章」原生广告卡时，自动点击「跳过」(gamepad_pass)；仅 com.tinder',
+      matchAnyApp: false,
+      apps: [{ id: 'com.tinder' }],
+      fastQuery: true,
+      resetMatch: 'match',
+      actionMaximum: 8,
+      actionCd: 1500,
+      rules: [
+        {
+          key: 0,
+          name: '原生广告卡(unified_static_image)',
+          matchRoot: true,
+          actionCdKey: 20,
+          matches: [
+            '[vid="unified_static_image_rec_card_ad_view"][visibleToUser=true]',
+            '[vid="gamepad_pass"][visibleToUser=true]',
+          ],
+        },
+        {
+          key: 1,
+          name: '原生广告卡(AD徽章)',
+          matchRoot: true,
+          actionCdKey: 20,
+          matches: [
+            '[vid="ad_choices_container"][visibleToUser=true]',
+            '[vid="gamepad_pass"][visibleToUser=true]',
+          ],
+        },
+      ],
+    },
+  ],
+  apps: [],
+}
