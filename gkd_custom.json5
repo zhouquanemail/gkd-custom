@@ -1,11 +1,14 @@
-// ZCode 局部补丁 v6（本机 + GitHub/jsDelivr 双主机统一版）
+// ZCode 局部补丁 v7（本机 + GitHub/jsDelivr CDN）
 // 变更:
-//  v5: 兜底组对 com.tinder 硬排除（apps:[{id:'com.tinder',enable:false}]）
-//  v6: updateUrl 改为全网可达的 jsDelivr CDN（raw.githubusercontent 国内不可达；本地 LAN 双环境易降级）
+//  v6: updateUrl 统一为全网可达的 jsDelivr CDN
+//  v7: 广告卡规则加交互性门槛 clickable=true + actionDelay=600ms
+//      修复：Deck 预实例化导致广告卡在底下时可见→提前命中→gamepad_pass 被
+//      当前交互卡（上一张真人卡）消费→必定误伤前一张真人卡
+//      只有 AD 卡成为顶卡（可交互）时才会触发左滑
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 6,
+  version: 7,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -20,7 +23,6 @@
       matchTime: 10000,
       actionMaximum: 3,
       resetMatch: 'app',
-      // Tinder 硬排除：其 pass 按钮 content-desc 就是「跳过」，兜底必误触
       apps: [{ id: 'com.tinder', enable: false }],
       rules: [
         {
@@ -42,7 +44,7 @@
     {
       key: 20,
       name: 'Tinder 广告卡片-自动跳过',
-      desc: '牌堆流中出现「AD 徽章」原生广告卡时，自动点击「跳过」(gamepad_pass)；仅 com.tinder',
+      desc: 'AD 徽章广告卡成为顶卡(clickable)时自动点「跳过」(gamepad_pass)；仅 com.tinder',
       matchAnyApp: false,
       apps: [{ id: 'com.tinder' }],
       fastQuery: true,
@@ -55,8 +57,9 @@
           name: '原生广告卡(unified_static_image)',
           matchRoot: true,
           actionCdKey: 20,
+          actionDelay: 600,
           matches: [
-            '[vid="unified_static_image_rec_card_ad_view"][visibleToUser=true]',
+            '[vid="unified_static_image_rec_card_ad_view"][clickable=true][visibleToUser=true]',
             '[vid="gamepad_pass"][visibleToUser=true]',
           ],
         },
@@ -65,8 +68,9 @@
           name: '原生广告卡(AD徽章)',
           matchRoot: true,
           actionCdKey: 20,
+          actionDelay: 600,
           matches: [
-            '[vid="ad_choices_container"][visibleToUser=true]',
+            '[vid="ad_choices_container"][clickable=true][visibleToUser=true]',
             '[vid="gamepad_pass"][visibleToUser=true]',
           ],
         },
