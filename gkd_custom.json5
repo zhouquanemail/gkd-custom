@@ -1,14 +1,11 @@
-// ZCode 局部补丁 v9
+// ZCode 局部补丁 v10
 // 变更:
-//  v8:  禁用 Tinder 广告卡自动跳过组（禁止即可，先止血）
-//  v9:  广告卡规则改判别条件为 width>1400（仅全屏顶卡 AD 容器命中）
-//       池化预绑定卡 width≈1324（内缩），visibleToUser/clickable 都无法区分
-//       顶卡与池化卡，只有全屏尺寸可靠。actionDelay=800 等待落位，
-//       单规则 key0 取代 v6/v7 的两条冗余规则
+//  v9:  width>1400 判别（全屏顶卡才命中），actionDelay=800
+//  v10: actionDelay 800→400（用户选择：体感快一倍；width>1400 全屏门槛保持不变）
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 9,
+  version: 10,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -57,7 +54,7 @@
           name: '原生广告卡(全屏顶卡)',
           matchRoot: true,
           actionCdKey: 20,
-          actionDelay: 800,
+          actionDelay: 400,
           matches: [
             '[vid="unified_static_image_rec_card_ad_view"][width>1400][visibleToUser=true]',
             '[vid="gamepad_pass"][visibleToUser=true]',
