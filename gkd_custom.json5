@@ -1,14 +1,13 @@
-// ZCode 局部补丁 v7（本机 + GitHub/jsDelivr CDN）
+// ZCode 局部补丁 v8（本机 + GitHub/jsDelivr CDN）
 // 变更:
-//  v6: updateUrl 统一为全网可达的 jsDelivr CDN
-//  v7: 广告卡规则加交互性门槛 clickable=true + actionDelay=600ms
-//      修复：Deck 预实例化导致广告卡在底下时可见→提前命中→gamepad_pass 被
-//      当前交互卡（上一张真人卡）消费→必定误伤前一张真人卡
-//      只有 AD 卡成为顶卡（可交互）时才会触发左滑
+//  v8: 彻底禁用 Tinder 广告卡自动跳过组（group 20）—— a11y 节点树无法区分
+//      "Deck 池中已预绑定的广告卡" 与 "顶部可交互广告卡"（两者都可见且 clickable），
+//      规则会在牌堆打开即连续左滑真人卡。人工刷广告卡，兜底组保持不变
+//      （Tinder 硬排除未动；开屏兜底正常工作）
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 7,
+  version: 8,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -44,12 +43,14 @@
     {
       key: 20,
       name: 'Tinder 广告卡片-自动跳过',
-      desc: 'AD 徽章广告卡成为顶卡(clickable)时自动点「跳过」(gamepad_pass)；仅 com.tinder',
+      desc: '已禁用(v8)：a11y 无法区分顶卡与池化预绑定广告卡，会误伤真人卡。如需自动跳过，需先抓取牌堆过渡期快照再设计判别条件',
+      enable: false,
       matchAnyApp: false,
       apps: [{ id: 'com.tinder' }],
       fastQuery: true,
+      matchTime: 10000,
+      actionMaximum: 3,
       resetMatch: 'match',
-      actionMaximum: 8,
       actionCd: 1500,
       rules: [
         {
