@@ -1,11 +1,12 @@
-// ZCode 局部补丁 v10
+// ZCode 局部补丁 v11
 // 变更:
-//  v9:  width>1400 判别（全屏顶卡才命中），actionDelay=800
-//  v10: actionDelay 800→400（用户选择：体感快一倍；width>1400 全屏门槛保持不变）
+//  v10: actionDelay 800→400
+//  v11: actionDelay 400→200（进一步缩短识别→派发延迟；物理下限=落定动画尾段+输入焦点切换，
+//       更低会回到 v7「打开即左滑真人卡」复发路径。400→200 仍保证 width>1400 全屏门槛不变）
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 10,
+  version: 11,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -54,7 +55,7 @@
           name: '原生广告卡(全屏顶卡)',
           matchRoot: true,
           actionCdKey: 20,
-          actionDelay: 400,
+          actionDelay: 200,
           matches: [
             '[vid="unified_static_image_rec_card_ad_view"][width>1400][visibleToUser=true]',
             '[vid="gamepad_pass"][visibleToUser=true]',
