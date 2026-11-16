@@ -1,11 +1,11 @@
-// ZCode 局部补丁 v13
+// ZCode 局部补丁 v14
 // 变更:
-//  v12: 新增 group 30 Badoo Liftoff(Vungle) endcard 关闭规则（click → 触发已记录但广告不动）
-//  v13: group 30 action 改为 clickCenter（真实坐标触摸；HTML 渲染按钮不识 clickNode）
+//  v13: group 30 action → clickCenter（真实触摸；替换流程误操作导致装机未生）
+//  v14: group 30 action → back（Activity 级返回，system 直接销毁 VungleActivity，零依赖 HTML 按钮响应）
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 13,
+  version: 14,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -65,7 +65,7 @@
     {
       key: 30,
       name: 'Badoo Liftoff 全屏广告-关闭',
-      desc: 'Liftoff(Vungle) MRAID endcard：识别 desc="Close button"(右上角 X) 用 clickCenter 派发真实触摸关闭',
+      desc: 'Liftoff(Vungle) MRAID endcard：识别 desc="Close button"（X 出现即发全局返回键，销毁 VungleActivity）',
       matchAnyApp: false,
       apps: [{ id: 'com.badoo.mobile' }],
       fastQuery: true,
@@ -75,11 +75,11 @@
       rules: [
         {
           key: 0,
-          name: 'Liftoff endcard 关闭按钮',
+          name: 'Liftoff endcard back关闭',
           matchRoot: true,
           actionCdKey: 30,
           actionDelay: 300,
-          action: 'clickCenter',
+          action: 'back',
           matches: [
             '[desc="Close button"][clickable=true][visibleToUser=true]',
           ],
