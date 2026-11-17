@@ -1,11 +1,12 @@
-// ZCode 局部补丁 v15
+// ZCode 局部补丁 v16
 // 变更:
-//  v14: group 30 改 action=back（X 出现时触发；仅 endcard 段）
-//  v15: group 30 改为 VungleActivity 出现即 action=back——强制广告零展示
+//  v11: actionDelay 400→200
+//  v16: Tinder 动作链再压缩——actionDelay 200→50；actionCd 1500→800（连刷广告卡不再被冷却卡住）
+//       延迟安全性主体仍由 width>1400（全屏顶卡才命中）保证，而非靠延迟厚度
 {
   id: 10010001,
   name: 'ZCode 局部补丁',
-  version: 15,
+  version: 16,
   author: 'zz-zcode',
   updateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
   checkUpdateUrl: 'https://cdn.jsdelivr.net/gh/zhouquanemail/gkd-custom@main/gkd_custom.json5',
@@ -47,14 +48,14 @@
       fastQuery: true,
       resetMatch: 'match',
       actionMaximum: 3,
-      actionCd: 1500,
+      actionCd: 800,
       rules: [
         {
           key: 0,
           name: '原生广告卡(全屏顶卡)',
           matchRoot: true,
           actionCdKey: 20,
-          actionDelay: 200,
+          actionDelay: 50,
           matches: [
             '[vid="unified_static_image_rec_card_ad_view"][width>1400][visibleToUser=true]',
             '[vid="gamepad_pass"][visibleToUser=true]',
